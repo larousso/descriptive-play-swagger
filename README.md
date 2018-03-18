@@ -87,7 +87,7 @@ addSbtPlugin("com.iheart" % "sbt-play-swagger" % "0.6.1-PLAY2.6")
 For play2.5 add Swagger sbt plugin dependency to your plugins.sbt (see [the releases tab](https://github.com/iheartradio/play-swagger/releases) for the latest versions)
 
 ```scala
-addSbtPlugin("com.iheart" % "sbt-play-swagger" % "0.6.2")
+addSbtPlugin("com.iheart" % "sbt-play-swagger" % "0.6.4")
 ```
 
 For play 2.6 and sbt 0.1.3 please use a special release build with play 2.6 binary.
@@ -97,7 +97,7 @@ addSbtPlugin("com.iheart" % "sbt-play-swagger" % "0.6.2-PLAY2.6")
 
 For play 2.6 and sbt 1.0 please use 
 ```scala
-addSbtPlugin("com.iheart" %% "sbt-play-swagger" % "0.7.1")
+addSbtPlugin("com.iheart" %% "sbt-play-swagger" % "0.7.3")
 ```
 
 For play 2.4 please use a special release build with play 2.4 binary (No longer maintained after 0.6.0)
@@ -311,3 +311,8 @@ Make sure you also update your swagger markup to specify that you are using Open
 ```
 
 Also, for `$ref` fields you will want to prefix paths with `#/components/schemas/` instead of `#/definitions/`
+
+
+#### Is play java supported? 
+
+Mostly. Auto definition generation for classes only works with Java classes that have all the fields in the first constructor. 
