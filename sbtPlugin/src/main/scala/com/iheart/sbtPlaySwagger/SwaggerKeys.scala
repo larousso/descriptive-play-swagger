@@ -14,4 +14,6 @@ trait SwaggerKeys {
   val swaggerV3 = SettingKey[Boolean]("swaggerV3", "whether to to produce output compatible with Swagger 3 (also knwon as OpenAPI 3)")
   val swaggerDescriptionFile = SettingKey[Option[File]]("swaggerDescriptionFile", "The location of a java properties file to supply descriptions for types and parameters.")
   val envOutputTransformer = "com.iheart.playSwagger.EnvironmentVariablesTransformer"
+
+  val swaggerAPIVersion = SettingKey[String]("swaggerAPIVersion", "Version of the API")
 }

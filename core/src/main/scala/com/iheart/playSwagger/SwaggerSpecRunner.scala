@@ -3,18 +3,17 @@ package com.iheart.playSwagger
 import java.io.File
 import java.nio.file.{ Files, Paths, StandardOpenOption }
 
-import scala.util.{ Failure, Success, Try }
+import scala.util.{ Success, Failure, Try }
 
 object SwaggerSpecRunner extends App {
   implicit def cl = getClass.getClassLoader
 
-  val (targetFile :: routesFile :: domainNameSpaceArgs :: outputTransformersArgs :: swaggerV3String :: Nil) = args.take(5).toList
-  parseOptions(new SwaggerSpecRunnerOptions, args.drop(5).toList) match {
+  val (targetFile :: routesFile :: domainNameSpaceArgs :: outputTransformersArgs :: swaggerV3String :: apiVersion :: Nil) = args.take(6).toList
+  parseOptions(new SwaggerSpecRunnerOptions, args.drop(6).toList) match {
     case SwaggerSpecRunnerOptions(Some(descriptionFile)) ⇒
       Descriptions.useDescriptionFile(new File(descriptionFile))
     case _ ⇒ // use default description provider when option is not supplied
   }
-
   private def fileArg = Paths.get(targetFile)
   private def swaggerJson = {
     val swaggerV3 = java.lang.Boolean.parseBoolean(swaggerV3String)
@@ -31,7 +30,8 @@ object SwaggerSpecRunner extends App {
     SwaggerSpecGenerator(
       domainModelQualifier,
       outputTransformers = transformers,
-      swaggerV3 = swaggerV3).generate(routesFile).get.toString
+      swaggerV3 = swaggerV3,
+      apiVersion = Some(apiVersion)).generate(routesFile).get.toString
   }
 
   Files.write(fileArg, swaggerJson.getBytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)

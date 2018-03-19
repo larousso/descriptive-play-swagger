@@ -32,6 +32,7 @@ object SwaggerPlugin extends AutoPlugin {
     swaggerFileName := "swagger.json",
     swaggerRoutesFile := "routes",
     swaggerOutputTransformers := Seq(),
+    swaggerAPIVersion := version.value,
     swaggerDescriptionFile := None,
     swagger := Def.task[File] {
       (swaggerTarget.value).mkdirs()
@@ -41,6 +42,7 @@ object SwaggerPlugin extends AutoPlugin {
         swaggerDomainNameSpaces.value.mkString(",") ::
         swaggerOutputTransformers.value.mkString(",") ::
         swaggerV3.value.toString ::
+        swaggerAPIVersion.value ::
         Nil ++ swaggerDescriptionFile.value.map { f ⇒
           Seq(
             "--description-file", f.getAbsolutePath)
