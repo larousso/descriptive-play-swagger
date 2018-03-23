@@ -1,5 +1,6 @@
 package com.iheart.sbtPlaySwagger
 
+import com.sohoffice.doc.extract.sbt.DocExtractPlugin
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._
 import sbt.Attributed._
@@ -9,11 +10,11 @@ import com.typesafe.sbt.web.Import._
 
 object SwaggerPlugin extends AutoPlugin {
   lazy val SwaggerConfig = config("play-swagger").hide
-  lazy val playSwaggerVersion = com.iheart.playSwagger.BuildInfo.version
+  lazy val playSwaggerVersion = com.sohoffice.playSwagger.BuildInfo.version
 
   object autoImport extends SwaggerKeys
 
-  override def requires: Plugins = JavaAppPackaging
+  override def requires: Plugins = JavaAppPackaging && DocExtractPlugin
 
   override def trigger = noTrigger
 
@@ -25,7 +26,7 @@ object SwaggerPlugin extends AutoPlugin {
     ivyConfigurations += SwaggerConfig,
     resolvers += Resolver.jcenterRepo,
     //todo: remove hardcoded org name using BuildInfo
-    libraryDependencies += "com.iheart" %% "play-swagger" % playSwaggerVersion % SwaggerConfig,
+    libraryDependencies += "com.sohoffice" %% "descriptive-play-swagger" % playSwaggerVersion % SwaggerConfig,
     swaggerDomainNameSpaces := Seq(),
     swaggerV3 := false,
     swaggerTarget := target.value / "swagger",
@@ -55,6 +56,6 @@ object SwaggerPlugin extends AutoPlugin {
     mappings in (Compile, packageBin) += (swaggerTarget.value / swaggerFileName.value) → s"public/${swaggerFileName.value}", //include it in the unmanagedResourceDirectories in Assets doesn't automatically include it package
     packageBin in Universal := (packageBin in Universal).dependsOn(swagger).value,
     run := (run in Compile).dependsOn(swagger).evaluated,
-    stage := stage.dependsOn(swagger).value)
+    stage := stage.dependsOn(swagger).value) ++ DocExtractPluginSupport.docExtractSettings
 }
 
