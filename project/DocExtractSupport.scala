@@ -4,7 +4,7 @@ import sbt.{ File, _ }
 object DocExtractSupport {
 
   object Versions {
-    val playSwagger = "0.7.5"
+    val playSwagger = "0.7.6-SNAPSHOT"
     val docExtract = "0.0.4"
   }
 

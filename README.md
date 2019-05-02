@@ -43,7 +43,7 @@ Follow the below steps or check the [seed project](https://github.com/sohoffice/
 - In the `project/plugins.sbt` file
 
 ```sbtshell
-addSbtPlugin("com.sohoffice" %% "sbt-descriptive-play-swagger" % "0.7.5")
+addSbtPlugin("com.sohoffice" %% "sbt-descriptive-play-swagger" % "0.7.6-SNAPSHOT")
 ```
 
 - In the `build.sbt` file
@@ -70,4 +70,4 @@ repo whenever they release a new version.
 
 ----
 
-sohoffice, happy coding ~
+[sohoffice](https://medium.com/sohoffice), happy coding ~
