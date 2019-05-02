@@ -18,8 +18,8 @@ The only downside is:
 > It will be great if we can `extract the scaladoc as the descriptions` for definition classes or api parameters !
 
 I then dive into the source codes and realized play-swagger is basically built on reflection. It will have a hard time to extract documents
-from source files. To remedy this, I've built [docExtract](https://github.com/sohoffice/docExtract) which is a scala doclet to extract
-documentation from your source files and it can be used to feed play-swagger.
+from source files, if this is ultimately possible. To remedy this, I've built [docExtract](https://github.com/sohoffice/docExtract). 
+A scala doclet to extract documentation from your source files and it can be used to feed play-swagger.
 
 To make the above happen, play-swagger will have to accept description feed as an external file. I've discussed with the maintainer of 
 play-swagger, it may be too pre-mature to add another external file. So this project is forked, and docExtract was also integrated.
@@ -34,7 +34,7 @@ documentation. Any new upstream release will be merged back, and the release ver
 ## Prerequisite
 
 Unlike the [iheartradio play-swagger](https://github.com/iheartradio/play-swagger), this extension supports only scala source files. It also 
-requires scala 2.12 and sbt 1.0+ to run. I believe Play 2.6 is required, since this is the only version that supports scala 2.12 and sbt 1.0+. 
+requires scala 2.12 and sbt 1.0+ to run. Only Play 2.7 is supported. 
 
 ## Installation
 
@@ -43,7 +43,7 @@ Follow the below steps or check the [seed project](https://github.com/sohoffice/
 - In the `project/plugins.sbt` file
 
 ```sbtshell
-addSbtPlugin("com.sohoffice" %% "sbt-descriptive-play-swagger" % "0.7.4")
+addSbtPlugin("com.sohoffice" %% "sbt-descriptive-play-swagger" % "0.7.5")
 ```
 
 - In the `build.sbt` file
@@ -67,9 +67,6 @@ lazy val root = (project in file("."))
 
 Please consider to contribute to [iheartradio play-swagger](https://github.com/iheartradio/play-swagger). I'll merge the changes back to this 
 repo whenever they release a new version.
-
-If you still would like to participate, please submit your PR to the 'sohoffice' branch.
-
 
 ----
 

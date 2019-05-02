@@ -1,13 +1,24 @@
 package com.iheart.playSwagger
 
+import java.io.File
 import java.nio.file.{ Files, Paths, StandardOpenOption }
 
-import scala.util.{ Success, Failure, Try }
+import play.api.libs.json.{ JsValue, Json }
+
+import scala.util.{ Failure, Success, Try }
 
 object SwaggerSpecRunner extends App {
-  implicit def cl = getClass.getClassLoader
+  implicit def cl: ClassLoader = getClass.getClassLoader
 
-  val (targetFile :: routesFile :: domainNameSpaceArgs :: outputTransformersArgs :: swaggerV3String :: apiVersion :: Nil) = args.toList
+  val targetFile :: routesFile :: domainNameSpaceArgs :: outputTransformersArgs :: swaggerV3String :: apiVersion :: swaggerPrettyJson :: Nil = args
+    .toList.take(7)
+  // read the --description-file options
+  parseDescriptionFileOption(new SwaggerSpecRunnerOptions, args.drop(7).toList) match {
+    case SwaggerSpecRunnerOptions(Some(descriptionFile)) ⇒
+      Descriptions.useDescriptionFile(new File(descriptionFile))
+    case _ ⇒ // use default description provider when option is not supplied
+  }
+
   private def fileArg = Paths.get(targetFile)
   private def swaggerJson = {
     val swaggerV3 = java.lang.Boolean.parseBoolean(swaggerV3String)
@@ -21,12 +32,30 @@ object SwaggerSpecRunner extends App {
         case Success(el) ⇒ el
       }
     }
-    SwaggerSpecGenerator(
+    val swaggerSpec: JsValue = SwaggerSpecGenerator(
       domainModelQualifier,
       outputTransformers = transformers,
       swaggerV3 = swaggerV3,
-      apiVersion = Some(apiVersion)).generate(routesFile).get.toString
+      apiVersion = Some(apiVersion)).generate(routesFile).get
+
+    if (swaggerPrettyJson.toBoolean) Json.prettyPrint(swaggerSpec)
+    else swaggerSpec.toString
   }
 
   Files.write(fileArg, swaggerJson.getBytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)
+
+  def parseDescriptionFileOption(options: SwaggerSpecRunnerOptions, list: List[String]): SwaggerSpecRunnerOptions = {
+    list match {
+      case Nil ⇒ options
+      case "--description-file" :: v :: others ⇒
+        val newOptions = options.copy(descriptionFile = Some(v))
+        parseDescriptionFileOption(newOptions, others)
+      case s :: others ⇒
+        // discard normal argument, they are taken in the beginning and should not exist
+        parseDescriptionFileOption(options, others)
+    }
+  }
+
+  case class SwaggerSpecRunnerOptions(
+    descriptionFile: Option[String] = None)
 }

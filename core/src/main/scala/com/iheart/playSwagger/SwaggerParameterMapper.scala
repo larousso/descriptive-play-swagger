@@ -14,7 +14,8 @@ object SwaggerParameterMapper {
   def mapParam(
     parameter:      Parameter,
     modelQualifier: DomainModelQualifier = PrefixDomainModelQualifier(),
-    customMappings: CustomMappings       = Nil)(implicit cl: ClassLoader): SwaggerParameter = {
+    customMappings: CustomMappings       = Nil,
+    description:    Option[String]       = None)(implicit cl: ClassLoader): SwaggerParameter = {
 
     def removeKnownPrefixes(name: String) = name.replaceAll("(scala.)|(java.lang.)|(math.)|(org.joda.time.)", "")
 
@@ -56,7 +57,8 @@ object SwaggerParameterMapper {
         format = format,
         required = defaultValueO.isEmpty,
         default = defaultValueO,
-        enum = enum)
+        enum = enum,
+        description = description)
 
     val enumParamMF: MappingFunction = {
       case JavaEnum(enumConstants)  ⇒ genSwaggerParameter("string", enum = Option(enumConstants))
@@ -69,7 +71,7 @@ object SwaggerParameterMapper {
       GenSwaggerParameter(parameter.name, referenceType = Some(referenceType))
 
     def optionalParam(optionalTpe: String) = {
-      val asRequired = mapParam(parameter.copy(typeName = optionalTpe), modelQualifier = modelQualifier, customMappings = customMappings)
+      val asRequired = mapParam(parameter.copy(typeName = optionalTpe), modelQualifier = modelQualifier, customMappings = customMappings, description = description)
       asRequired.update(required = false, default = asRequired.default)
     }
 
@@ -117,7 +119,8 @@ object SwaggerParameterMapper {
             mapping.specAsParameter,
             mapping.specAsProperty,
             default = defaultValueO,
-            required = defaultValueO.isEmpty && mapping.required)
+            required = defaultValueO.isEmpty && mapping.required,
+            description = description)
       }
       mf
     }.foldLeft[MappingFunction](PartialFunction.empty)(_ orElse _)
