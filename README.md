@@ -26,15 +26,12 @@ play-swagger, it may be too pre-mature to add another external file. So this pro
 
 The usefulness of this plugin is still uncertain. But I'm happy using it to facilitate `API first development principle` for my new projects.  
  
-## Usage
-
-This plugin is an extension to [iheartradio play-swagger](https://github.com/iheartradio/play-swagger), please refer it for usage 
-documentation. Any new upstream release will be merged back, and the release version will match.
-
 ## Prerequisite
 
-Unlike the [iheartradio play-swagger](https://github.com/iheartradio/play-swagger), this extension supports only scala source files. It also 
-requires scala 2.12 and sbt 1.0+ to run. Only Play 2.7 is supported. 
+- Only the scala source files will have the description generated
+- Scala 2.12
+- Play framework 2.7
+- Sbt 1.0+
 
 ## Installation
 
@@ -61,12 +58,7 @@ lazy val root = (project in file("."))
   )
 ```
   
-> Swagger task will be executed in the run stage, or execute `swagger` to manually re-generate swagger.json
-
-## Contributions
-
-Please consider to contribute to [iheartradio play-swagger](https://github.com/iheartradio/play-swagger). I'll merge the changes back to this 
-repo whenever they release a new version.
+> Swagger task will be executed in the run stage, or execute `swagger` in sbt console to manually re-generate swagger.json
 
 ----
 
